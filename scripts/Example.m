@@ -156,7 +156,6 @@ for i = 1:N
     fitted_centerlines{i} = fr.pts;
 end
 
-%%
 score_list = zeros(N,1);
 for i = 1:N
     rr1 = [shifted_random_edges(i,1:3);shifted_random_edges(i,4:6)];
@@ -170,7 +169,7 @@ for i = 1:N
     score_list(i) = mean(min_distances);
 end
 %%
-[d,dist_vec,contact_site] = distance_between_edges(edge_i,edge_j);
+% [d,dist_vec,contact_site] = distance_between_edges(edge_i,edge_j);
 
 %%
 set_figure(6,5)
@@ -190,7 +189,7 @@ print(gcf,'../results/segmentation_error2.png','-dpng','-r600');
 generated_edges = shifted_random_edges;
 generated_image = zstack;
 
-% found_contacts = contacts;
+found_contacts = contacts;
 found_centerlines = centerlines;
 
 %%
