@@ -168,8 +168,6 @@ for i = 1:N
     end
     score_list(i) = mean(min_distances);
 end
-%%
-% [d,dist_vec,contact_site] = distance_between_edges(edge_i,edge_j);
 
 %%
 set_figure(6,5)
