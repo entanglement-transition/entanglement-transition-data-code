@@ -3,9 +3,12 @@ function [cl_list,good_segments,scores,error_list] = segmentation_by_bwskel(zsta
 
 skel = bwskel(zstack);
 bran = bwmorph3(skel,'branchpoints');
-se = strel('disk',2);
-bran = imdilate(bran,se);
-lines = bwmorph3(skel&~bran,'clean'); % remove isolated voxels
+
+% se = strel('sphere',2);
+% bran = imdilate(bran,se);
+% lines = bwmorph3(skel&~bran,'clean'); % remove isolated voxels
+
+lines = skel&~bran;
 cc = bwconncomp(lines);
 
 ind_list = cc.PixelIdxList;
@@ -30,7 +33,7 @@ for i = 1:num_cc
     dlist = rwnorm(cl - (cen + ori.*slist));
     error_list(i) = mean(dlist);
 
-    if mean(dlist) < 5 & numel(ind) > 5;
+    if mean(dlist) < 100 & numel(ind) > 5;
         % TO DO: smooth cl otherwise its sweep will be very erratic
         [sweep,sweep_ind] = cylinder_sweep_indices2(size(zstack),cl,radius_0);
         true_sweep = zstack(sweep_ind);
@@ -52,6 +55,7 @@ for i = 1:num_cc
         score = nnz(cyl_ind) /size(rod,1);
         scores(i) = score;
     end
+    
     if mod(i,100) == 0
         fprintf('%d / %d processed. %.2f sec elapsed.\n',i,num_cc,toc(tstart));
     end

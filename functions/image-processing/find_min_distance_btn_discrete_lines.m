@@ -24,7 +24,9 @@ for i = 1:size(edges_i,1)
     for j = 1:size(edges_j,1)
         e_j = [vertices_j(j,:) vertices_j(j+1,:)];
 
-        [dist_vec,so1,so2] = find_min_distance(e_i,e_j);
+        [dist_vec,so1,so2] = find_min_distance(e_i,e_j);        
+%         [d,dvec,contact_point] = distance_between_edges(e_i,e_j);
+        
         if norm(dist_vec) < d_min
             distance_vector = dist_vec;
             d_min = norm(dist_vec);

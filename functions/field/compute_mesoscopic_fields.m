@@ -82,8 +82,8 @@ for k = 1:num_z
                 total_self_entanglement = total_self_entanglement + e_self;
             end
             
+            
             two_point_edges = zeros(num_labels,7);
-
 
             for i_lb = 1:num_labels
                 e1 = labeled_edges_bound(insider_labels==insider_labels(i_lb),1:3);
@@ -104,6 +104,7 @@ for k = 1:num_z
                 e_self = sum(abs(e_self_matrix(:)),'omitnan');
                 total_self_entanglement_2e = total_self_entanglement_2e + e_self;
             end
+            
                      
             
             number_field(i,j,k) = num_labels;

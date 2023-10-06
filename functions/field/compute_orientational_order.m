@@ -20,8 +20,8 @@ elseif N > 0
     Q2 = (3*Q/N - eye(3))/2;
     [V,D] = eig(Q2);
     
-    [~,I] = max((diag(D)));    
-%     [~,I] = max(abs((diag(D))));
+%     [~,I] = max((diag(D)));    
+    [~,I] = max(abs((diag(D))));
     
     s = D(I,I);
 end

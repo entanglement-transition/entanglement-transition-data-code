@@ -1,12 +1,16 @@
-function [h,lifted] = visualize_highlighted_region(stack,highlight)
-%     highlight = unique(round(highlight),'rows','stable');
-%     highlight = cut_to_matrix_size(size(stack),highlight);
+function [h,lifted,flash] = visualize_highlighted_region(stack,highlight)
+    highlight = unique(round(highlight),'rows','stable');
+    highlight = cut_to_matrix_size(size(stack),highlight);
     cuboid = get_bbox(size(stack),highlight);
 
     lifted = imcrop3(stack,cuboid);
     flash = get_line_img(size(lifted),highlight - cuboid([2 1 3]) + [1 1 1]);
 
+
+    flash = imdilate(flash,strel('sphere',2));
     A = lifted + 2*flash;
+
+
     num_labels = numel(unique(A(:)));
 
     label_opacity = ones(num_labels,1)*0.04;

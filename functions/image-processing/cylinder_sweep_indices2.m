@@ -14,8 +14,11 @@ function [sweep,indices] = cylinder_sweep_indices2(stack_size,cen,r)
 %     num_sphere_points*(1-1)+num_sphere_points+1;
     all_points_cell = cell(1,num_centerline_points);
     for i = 1:num_centerline_points-1        
-        h = norm(cen(i+1,:) - cen(i,:))*1.5; % parameter
-        ind = (1:2*h+1) - (h+1);
+        h = norm(cen(i+1,:) - cen(i,:)); % parameter
+        
+        meshgrid_size = max(h,r);
+        
+        ind = (1:2*meshgrid_size+1) - (meshgrid_size+1);
         [X,Y,Z] = meshgrid(ind,ind,ind);
 
         tt = (cen(i+1,:) - cen(i,:))/norm(cen(i+1,:) - cen(i,:));

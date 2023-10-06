@@ -64,8 +64,8 @@ for k = 1:num_z
             I_ct = rwnorm(slab_ct(:,1:3) - center) < R;
             num_contacts = nnz(I_ct);
             
-%             contact_density_field(i,j,k) = num_contacts/expected_number_of_contacts;
-            contact_density_field(i,j,k) = num_contacts;
+            contact_density_field(i,j,k) = num_contacts/expected_number_of_contacts;
+%             contact_density_field(i,j,k) = num_contacts;
             
         end
     end
