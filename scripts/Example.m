@@ -1,5 +1,7 @@
 restoredefaultpath
 setup
+
+mkdir('../results')
 %%
 container_radius = 600;
 container_height = 600;
@@ -17,10 +19,6 @@ number_density*edge_length^2*rod_diameter
 random_edges = generate_intersecting_random_rods_in_cylinder(num_rods,container_radius,container_height,edge_length);
 
 %%
-% close all;
-% plot_edges(random_edges)
-
-%%
 rod_radius = rod_diameter/2;
 N = size(random_edges,1);
 distance_matrix = Inf(N,N);
@@ -30,7 +28,6 @@ for i = 1:N
     
     j_select = find(distance_lower_bound < 10*rod_radius)';
     j_select = setdiff(j_select,i);
-    %     neighbor_edges = random_nonintersecting_rod_edges(distance_lower_bound < 10*rod_radius,:);
     
     for j = j_select
         edge_j = random_edges(j,:);
@@ -38,25 +35,16 @@ for i = 1:N
     end
 end
 
-nnz(distance_matrix < rod_radius*2)/size(random_edges,1)
+%%
 
-% generate_random_rods_in_cylinder(num_rods,container_radius,container_height,edge_length,rod_radius)
-%%
-[d,dist_vec,contact_site] = distance_between_edges(edge_i,edge_j);
-%%
-clc
 [contact_info,distance_matrix] = get_contact_info_for_edges(random_edges,rod_radius);
-%%
-size(contact_info)
-size(unique(sort([contact_info.i,contact_info.j],2),'row'))
-
 [~,ia,~] = unique(sort([contact_info.i,contact_info.j],2),'row');
 contacts = contact_info(ia,:);
 size(contacts)
 
 g = graph(contacts.i,contacts.j);
 deg = degree(g);
-mean(deg)
+
 %%
 
 N = size(random_edges,1);
@@ -71,10 +59,9 @@ for i = 1:N
     rod_image(I) = 1;
 end
 
-%%
+%% generate 3D array of voxel iamage
+
 zstack = imdilate(rod_image,strel('sphere',rod_radius));
-%%
-tic
 
 [cl_list,good_segments] = segmentation_by_bwskel(zstack,ceil(rod_radius),0.8,0.5);
 trimmed = trim_centerlines(cl_list,800,1);
@@ -96,9 +83,6 @@ radius_0 = rod_radius;
 cylinder_halflength = radius_0 * 4;
 final_centerline_list = lengthen_centerlines_from_ends(zstack,final_centerline_list,radius_0,cylinder_halflength);
 trimmed = trim_centerlines(final_centerline_list,750,1);
-% final_centerline_list = fill_centerlines(zstack,final_centerline_list,1);
-% final_centerline_list = cellfun(@(x) x+left_corner,final_centerline_list,'uniformoutput',false);
-
 fitted_centerlines = cell(size(trimmed));
 for i = 1:numel(trimmed)
     rr = trimmed{i};
@@ -149,7 +133,6 @@ for i = 1:N
 end
 
 %%
-close all;
 set_figure(6,5);
 histogram(score_list(score_list<2),'normalization','probability');
 hold on;
@@ -185,19 +168,18 @@ for i = 1:N
     end
     score_list(i) = mean(min_distances);
 end
+%%
+[d,dist_vec,contact_site] = distance_between_edges(edge_i,edge_j);
 
 %%
-close all;
 set_figure(6,5)
 histogram(score_list,linspace(0,1,30),'normalization','probability')
 xlabel('$\bar{\epsilon}_\mathrm{centerline}$ (pixels)')
 ylabel('Probability');
 print(gcf,'../results/segmentation_error.png','-dpng','-r600');
-%
-% set(gca,'xscale','log')
-close all;
-set_figure(6,5);
 
+
+set_figure(6,5);
 histogram(score_list,linspace(1,100,30),'normalization','probability')
 xlabel('$\bar{\epsilon}_\mathrm{centerline}$ (pixels)')
 ylabel('Probability');
