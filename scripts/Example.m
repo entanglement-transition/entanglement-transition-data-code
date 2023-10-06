@@ -1,6 +1,7 @@
 restoredefaultpath
 setup
 
+addpath(genpath('../functions'))
 mkdir('../results')
 %%
 container_radius = 600;
