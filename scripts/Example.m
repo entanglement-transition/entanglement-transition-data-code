@@ -91,7 +91,7 @@ for i = 1:numel(trimmed)
         
     fitted_centerlines{i} = fr.pts;
 end
-toc
+
 
 %%
 shifted_random_edges = random_edges + [container_radius+1,container_radius+1,1,container_radius+1,container_radius+1,1];    
